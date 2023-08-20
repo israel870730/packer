@@ -1,0 +1,15 @@
+{
+    "ami_component_description": "ScaleFT, AppDynamic, Wazuh",
+    "ami_description": "Golden-AMI-to-EKS-Kubernetes-{{timestamp}}",
+    "ami_users": "",
+    "aws_access_key_id": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_region": "us-west-2",
+    "aws_secret_access_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_session_token": "{{env `AWS_SESSION_TOKEN`}}",
+    "creator": "@igarcia",
+    "source_ami_filter_name": "amzn2-ami-minimal-hvm-*",
+    "source_ami_id": "",
+    "source_ami_owners": "137112412989",
+    "arch": "x86_64",
+    "ssh_username": "ec2-user"
+}
