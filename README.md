@@ -1,2 +1,2 @@
 # packer
-Build Custom AMI 
+Projecto to build custom AMI 
