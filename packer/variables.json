@@ -11,5 +11,12 @@
     "source_ami_id": "",
     "source_ami_owners": "137112412989",
     "arch": "x86_64",
-    "ssh_username": "ec2-user"
+    "volume_type": "gp2",
+    "ssh_username": "ec2-user",
+    "environment": "POC",
+    "scaleft": "nonProd",
+    "filebeat": "True",
+    "wazuh": "True",
+    "zabbix": "True",
+    "project": "Renovite"
 }

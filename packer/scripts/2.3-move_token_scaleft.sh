@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#--------------------------------------------------
+# Hacer un bk de fichero "sshd_config" y luego editarlo
+
 sudo cp -p /etc/ssh/sshd_config /etc/ssh/sshd_config.bk
 sudo cat > /etc/ssh/sshd_config << 'EOF'
 #       $OpenBSD: sshd_config,v 1.100 2016/08/15 12:32:04 naddy Exp $
@@ -157,7 +160,46 @@ EOF
 sudo systemctl restart sshd.service
 
 #--------------------------------------------------
-#sudo echo 'eyJzIjoiNWQxMmE3MjYtYWMwOS00MDBiLWI5MGUtZmRhODdmYjlmYTM1IiwidSI6Imh0dHBzOi8vYXBwLnNjYWxlZnQuY29tIn0=' > /var/lib/sftd/enrollment.token
-aws ssm get-parameters --names "/NonProd/okta/token" --query "Parameters[*].{Value:Value}" --region eu-west-2 | jq '.[] .Value' | sed 's/[""]*//g' > /tmp/enrollment.token
+# Modificar el msg cuando accedes al servidor
+
+sudo cp -p /etc/issue.net /etc/issue.net.bk
+sudo cat > /etc/issue.net << 'EOF'
+/------------------------------------------------------------------------\
+|                       *** NOTICE TO USERS ***                          |
+|               _   _           _  __                                    |
+|              | | | |         (_)/ _|                                   |
+|              | | | | ___ _ __ _| |_ ___  _ __   ___                    |
+|              | | | |/ _ \ '__| |  _/ _ \| '_ \ / _ \                   |
+|              \ \_/ /  __/ |  | | || (_) | | | |  __/                   |
+|               \___/ \___|_|  |_|_| \___/|_| |_|\___|                   |
+|                                                                        |
+| This computer system is the private property of VERIFONE, Inc          |
+| It is for authorized use only.                                         |
+|                                                                        |
+| Users (authorized or unauthorized) have no explicit or implicit        |
+| expectation of privacy.                                                |
+|                                                                        |
+| Any or all uses of this system and all files on this system may be     |
+| intercepted, monitored, recorded, copied, audited, inspected, and      |
+| disclosed to your employer, to authorized site, government, and law    |
+| enforcement personnel, as well as authorized officials of government   |
+| agencies, both domestic and foreign.                                   |
+|                                                                        |
+| By using this system, the user consents to such interception,          |
+| monitoring, recording, copying, auditing, inspection, and disclosure   |
+| at the discretion of such personnel or officials.  Unauthorized or     |
+| improper use of this system may result in civil and criminal penalties |
+| and administrative or disciplinary action, as appropriate. By          |
+| continuing to use this system you indicate your awareness of and       |
+| consent to these terms and conditions of use. LOG OFF IMMEDIATELY if   |
+| you do not agree to the conditions stated in this warning.             |
+\------------------------------------------------------------------------/
+EOF
+
+#--------------------------------------------------
+# Aqui muevo el token hacia su lugar correcto
+
+sudo mv /tmp/enrollment.token /var/lib/sftd/enrollment.token
+
 sudo systemctl stop sftd
 sudo systemctl start sftd

@@ -14,3 +14,10 @@ crash.log
 
 # For built boxes
 *.box
+
+*manifest.json
+*.swp
+.idea
+*version-info.json
+.DS_Store
+

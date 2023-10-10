@@ -9,7 +9,14 @@
     "source_ami_filter_name": "",
     "aws_region": "",
     "arch": "",
-    "creator": ""
+    "volume_type": "",
+    "creator": "",
+    "environment": "",
+    "scaleft": "",
+    "filebeat": "",
+    "wazuh": "",
+    "zabbix": "",
+    "project": ""
     },
     "builders": [{
       "type": "amazon-ebs",
@@ -31,14 +38,26 @@
       "instance_type": "t2.micro",
       "ssh_username": "{{user `ssh_username`}}",
       "ami_name": "Golden-AMI-to-EKS-{{timestamp}}",
+      "ami_block_device_mappings": [
+        {
+          "device_name": "/dev/xvda",
+          "volume_type": "{{user `volume_type`}}",
+          "volume_size": 20,
+          "delete_on_termination": true
+        }
+      ],
       "run_tags": {
         "Name": "Golden-AMI-to-EKS-{{timestamp}}",
         "Creator": "{{user `creator`}}"
       },
       "tags": {
         "Name": "Golden-AMI-to-EKS-{{timestamp}}",
-        "Env": "Prod",
-        "Scaleft": "Yes"
+        "Env": "{{user `environment`}}",
+        "Scaleft": "{{user `scaleft`}}",
+        "Filebeat": "{{user `filebeat`}}",
+        "Wazuh": "{{user `wazuh`}}",
+        "Zabbix": "{{user `zabbix`}}",
+        "Project": "{{user `project`}}"
       }
     }],
     "provisioners": [
@@ -46,7 +65,25 @@
             "type": "shell",
             "execute_command": "echo 'Executing script!' | sudo -S -E sh -eux '{{.Path}}'",
             "scripts": [
-              "scripts/setup_repo_okta.sh"              
+              "scripts/1-os_hardening.sh",
+              "scripts/4-install_wazuh.sh",
+              "scripts/2-install_scaleft.sh",
+              "scripts/3-install_filebeat.sh",
+              "scripts/5-install_zabbix.sh"
+            ]
+        },
+        {
+            "type": "shell",
+            "script": "scripts/2.2-get_token_scaleft.sh",
+            "environment_vars": [
+              "SCALEFT={{user `scaleft`}}"
+            ]   
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'Moving scaleft token!' | sudo -S -E sh -eux '{{.Path}}'",
+            "scripts": [
+              "scripts/2.3-move_token_scaleft.sh"
             ]
         }
     ]

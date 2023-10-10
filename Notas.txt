@@ -1,5 +1,0 @@
-export AWS_ACCESS_KEY_ID=KEY
-export AWS_SECRET_ACCESS_KEY=SECRET
-export AWS_SESSION_TOKEN=
-
-packer build -var-file=variables.json packer.json

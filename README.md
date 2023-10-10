@@ -1,2 +1,2 @@
 # packer
-Projecto to build custom AMI 
+Project to build custom AMI to EKS 
